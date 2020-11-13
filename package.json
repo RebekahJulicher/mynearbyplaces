@@ -1,5 +1,6 @@
 {
   "name": "mynearbyplaces",
+  "homepage": "http://rebekahjulicher.github.io/mynearbyplaces",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
