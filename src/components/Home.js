@@ -2,6 +2,11 @@ import React from 'react';
 import { Redirect } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import history from '../ServerInterface/history.js';
+import Row from 'react-bootstrap/Row';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 class Home extends React.Component {
     constructor(props) {
@@ -21,8 +26,8 @@ class Home extends React.Component {
     }
 
     onInputChange = (event) => {
-        const value = event.target.value;
-        const name = event.target.name;
+        const value = event.target.value.toUpperCase();
+        const name = event.target.id;
         this.setState({ [name]: value });
     }
 
@@ -41,50 +46,58 @@ class Home extends React.Component {
         }
 
         let username = history.username;
+        const { prevProps } = this.props.location;
+        let place = {};
+        if (prevProps) {
+            place = prevProps.place;
+        }
 
         return (
-            <div>
+            <Container>
+                <Row>
+                    <Col sm={2}>
+                        {username.length > 0 ?
+                            <Col>
+                                <Row>{history.username}</Row>
+                                <Row>
+                                    <Button variant="btn btn-outline-primary btn-sm" onClick={this.logout}>Logout</Button>
+                                </Row>
+                            </Col>
+                            : <Button variant="btn btn-outline-primary btn-sm">
+                                <Link to={{ pathname: '/login', place: place, from: '/mynearbyplaces' }}>Login</Link>
+                                </Button>}
+                        <Row>
+                            <Link to={{ pathname: "/place", removing: false }}>Add a business</Link>
+                        </Row>
+                        <Row>
+                            <Link to={{ pathname: "/place", removing: true }}>Remove a business</Link>
+                        </Row>
+                    </Col>
+                    <Col sm={8}>Search for local businesses:
+                    <Form onSubmit={this.onSubmit}>
+                            <Form.Group controlId="city">
+                                <Form.Label>City</Form.Label>
+                                <Form.Control type="text" value={city}
+                                    onChange={this.onInputChange} placeholder="Enter city" />
+                            </Form.Group>
 
-                <div className="loginButton">
-                    {username.length > 0 ?
-                        <div>
-                            {username}
-                            <button onClick={this.logout}>Logout</button>
-                        </div>
-                        : <Link to='/login'>Login</Link>}
-                </div>
-                <div>
-                    <h1>Search by nearby in category:</h1>
-                    <form onSubmit={this.onSubmit}>
-                        <label>City: </label>
-                        <input
-                            type="text"
-                            name="city"
-                            value={city}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>State: </label>
-                        <input
-                            type="text"
-                            name="state"
-                            value={state}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>Category: </label>
-                        <input
-                            type="text"
-                            name="category"
-                            value={category}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
+                            <Form.Group controlId="state">
+                                <Form.Label>State</Form.Label>
+                                <Form.Control type="text" value={state}
+                                    onChange={this.onInputChange} placeholder="Enter state" />
+                            </Form.Group>
+                            <Form.Group controlId="category">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control type="text" value={category}
+                                    onChange={this.onInputChange} placeholder="Enter category" />
+                            </Form.Group>
 
-            </div>
+                            <Button variant="primary" type="submit">Search</Button>
+                        </Form>
+                    </Col>
+                </Row>
+
+            </Container>
         );
     }
 }

@@ -2,6 +2,10 @@ import server from "../ServerInterface/server.js";
 import React from 'react';
 import { Link } from 'react-router-dom';
 import history from '../ServerInterface/history.js';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 class List extends React.Component {
     constructor(props) {
@@ -17,50 +21,74 @@ class List extends React.Component {
     }
 
     body = () => {
+        const { prevProps } = this.props.location;
+        let place = {};
+        if (prevProps) {
+            place = prevProps.place;
+        }
         return (
-            <div>
-                <div className="loginButton">
-                    {history.username.length > 0 ?
-                        <div>
-                            {history.username}
-                            <button onClick={this.logout}>Logout</button>
-                        </div>
-                        : <Link to='/login'>Login</Link>}
-                </div>
-                {this.state.places.length > 0 ?
-                    <div>
-                        {this.state.places.map((q, i) =>
-                            <div className="storeDiv" key={i}>
-                                <Link className="storeLink" to={{ pathname: "/reviews", prevProps: {place: q} }}>
-                                    <div className="business">
-                                        <h2>{q.name}</h2>
-                                        <h3>{q.city}, {q.state}</h3>
-                                        <p>{q.category}</p>
-                                    </div>
-                                </Link>
-                            </div>)}
-                        <Link to="/mynearbyplaces"><h3>Back to search</h3></Link>
-                    </div>
-                    : <div>
-                        <h2>No businesses found matching that criteria.</h2>
-                        <Link to="/mynearbyplaces"><h3>Back to search</h3></Link>
-                    </div>}
-
-                <div className="buttons">
-                    <Link to={{ pathname: "/place", removing: false }}>
-                        <h3>Add a business</h3>
-                    </Link>
-                    <Link to={{ pathname: "/place", removing: true }}>
-                        <h3>Remove a business</h3>
-                    </Link>
-                </div>
-            </div>
+            <Container>
+                <Row>
+                    <Col sm={2}>
+                        {history.username.length > 0 ?
+                            <Col>
+                                <Row>{history.username}</Row>
+                                <Row>
+                                    <Button variant="btn btn-outline-primary btn-sm" onClick={this.logout}>Logout</Button>
+                                </Row>
+                            </Col>
+                            : <Button variant="btn btn-outline-primary btn-sm">
+                                <Link to={{ pathname: '/login', place: place, from: '/list' }}>Login</Link>
+                            </Button>}
+                    </Col>
+                    {this.state.places.length > 0 ?
+                        <Col sm={8}>
+                            {this.state.places.map((q, i) =>
+                                <Row key={i}>
+                                    <Col>
+                                        <Link className="storeLink" to={{ pathname: "/reviews", prevProps: { place: q } }}>
+                                            <Button variant="outline-secondary" size="lg" block>
+                                                <Row><b>{q.name}</b></Row>
+                                                <Row>{q.city}, {q.state}</Row>
+                                                <Row>{q.category}</Row>
+                                            </Button>
+                                        </Link>
+                                    </Col>
+                                </Row>)}
+                            <Row>
+                                <Link to={{ pathname: "/place", removing: false }}>Add a business</Link>
+                            </Row>
+                            <Row>
+                                <Link to={{ pathname: "/place", removing: true }}>Remove a business</Link>
+                            </Row>
+                            <Row>
+                                <Button variant="outline-warning" size="small">
+                                    <Link to="/mynearbyplaces">Back to search</Link>
+                                </Button>
+                            </Row>
+                        </Col>
+                        : <Col sm={8}>
+                            <Row>No businesses found matching that criteria.</Row>
+                            <Row>
+                                <Link to={{ pathname: "/place", removing: false }}>Add a business</Link>
+                            </Row>
+                            <Row>
+                                <Link to={{ pathname: "/place", removing: true }}>Remove a business</Link>
+                            </Row>
+                            <Row>
+                                <Button variant="outline-warning" size="small">
+                                    <Link to="/mynearbyplaces">Back to search</Link>
+                                </Button>
+                            </Row>
+                        </Col>}
+                </Row>
+            </Container>
         );
     }
 
     componentDidMount() {
         const { city, state, category, } = this.props.location.state;
-        
+
         let allPlaces = server.search(city, state, category);
 
         this.setState({ places: allPlaces });
@@ -68,9 +96,7 @@ class List extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.body()}
-            </div>
+            this.body()
         );
     }
 

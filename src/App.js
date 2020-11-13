@@ -11,6 +11,7 @@ import Place from './components/Place.js';
 import List from './components/List.js';
 import Reviews from './components/Reviews.js';
 import NewReview from './components/NewReview.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

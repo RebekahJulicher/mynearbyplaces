@@ -1,6 +1,11 @@
 import server from "../ServerInterface/server.js";
 import React from 'react';
 import { Redirect } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 class Place extends React.Component {
     constructor(props) {
@@ -36,9 +41,77 @@ class Place extends React.Component {
     }
 
     onInputChange = (event) => {
-        const value = event.target.value;
-        const name = event.target.name;
+        const value = event.target.value.toUpperCase();
+        const name = event.target.id;
         this.setState({ [name]: value });
+    }
+
+    addForm = () => {
+        return (
+            <Container>
+                <Row>
+                    <Col><Form onSubmit={this.onAddSubmit}>
+                        <Form.Group controlId="name">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type="text" value={this.state.name}
+                                onChange={this.onInputChange} placeholder="Enter name" />
+                        </Form.Group>
+
+                        <Form.Group controlId="category">
+                            <Form.Label>Category</Form.Label>
+                            <Form.Control type="text" value={this.state.category}
+                                onChange={this.onInputChange} placeholder="Enter category" />
+                        </Form.Group>
+                        <Form.Group controlId="city">
+                            <Form.Label>City</Form.Label>
+                            <Form.Control type="text" value={this.state.city}
+                                onChange={this.onInputChange} placeholder="Enter city" />
+                        </Form.Group>
+                        <Form.Group controlId="state">
+                            <Form.Label>State</Form.Label>
+                            <Form.Control type="text" value={this.state.state}
+                                onChange={this.onInputChange} placeholder="Enter state" />
+                        </Form.Group>
+
+                        <Button variant="secondary" onClick={this.onCancel}>Cancel</Button>
+                        <Button variant="primary" type="submit">Add Business</Button>
+                    </Form></Col>
+                </Row>
+            </Container>
+        )
+    }
+
+    removeForm = () => {
+        return (
+            <Row>
+                <Col><Form onSubmit={this.onRemoveSubmit}>
+                    <Form.Group controlId="name">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control type="text" value={this.state.name}
+                            onChange={this.onInputChange} placeholder="Enter name" />
+                    </Form.Group>
+
+                    <Form.Group controlId="category">
+                        <Form.Label>Category</Form.Label>
+                        <Form.Control type="text" value={this.state.category}
+                            onChange={this.onInputChange} placeholder="Enter category" />
+                    </Form.Group>
+                    <Form.Group controlId="city">
+                        <Form.Label>City</Form.Label>
+                        <Form.Control type="text" value={this.state.city}
+                            onChange={this.onInputChange} placeholder="Enter city" />
+                    </Form.Group>
+                    <Form.Group controlId="state">
+                        <Form.Label>State</Form.Label>
+                        <Form.Control type="text" value={this.state.state}
+                            onChange={this.onInputChange} placeholder="Enter state" />
+                    </Form.Group>
+
+                    <Button variant="secondary" onClick={this.onCancel}>Cancel</Button>
+                    <Button variant="primary" type="submit">Remove Business</Button>
+                </Form></Col>
+            </Row>
+        )
     }
 
     render() {
@@ -47,84 +120,12 @@ class Place extends React.Component {
             return (<Redirect to={from} />);
         }
         return (
-            <div>
+            <Container>
                 {this.props.location.removing === false ?
-                    <form onSubmit={this.onAddSubmit}>
-                        <label>Name:</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>Category:</label>
-                        <input
-                            type="text"
-                            name="category"
-                            value={this.state.category}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>City:</label>
-                        <input
-                            type="text"
-                            name="city"
-                            value={this.state.city}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>State:</label>
-                        <input
-                            type="text"
-                            name="state"
-                            value={this.state.state}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <div>
-                        <button onClick={this.onCancel} >Cancel</button>
-                        <button type="submit">Add Business</button>
-                        </div>
-                    </form>
+                    this.addForm()
                     :
-                    <form onSubmit={this.onRemoveSubmit}>
-                        <label>Name:</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>Category:</label>
-                        <input
-                            type="text"
-                            name="category"
-                            value={this.state.category}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>City:</label>
-                        <input
-                            type="text"
-                            name="city"
-                            value={this.state.city}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <br />
-                        <label>State:</label>
-                        <input
-                            type="text"
-                            name="state"
-                            value={this.state.state}
-                            onChange={this.onInputChange}
-                        ></input>
-                        <div>
-                        <button onClick={this.onCancel} >Cancel</button>
-                        <button type="submit">Remove Business</button>
-                        </div>
-                    </form>}
-            </div>
+                    this.removeForm()}
+            </Container>
         )
     }
 }

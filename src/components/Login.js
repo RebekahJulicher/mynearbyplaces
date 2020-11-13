@@ -1,7 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import history from '../ServerInterface/history.js';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 
 class Login extends React.Component {
     constructor(props) {
@@ -20,15 +23,19 @@ class Login extends React.Component {
         event.preventDefault();
     }
 
+    onCancel = (event) => {
+        this.setState({authenticated: true});
+        event.preventDefault();
+    }
+
     onInputChange = (event) => {
         const value = event.target.value;
-        const name = event.target.name;
+        const name = event.target.id;
         this.setState({[name]: value});
     }
 
     render() {
         let from = {pathname: this.props.location.from, prevProps: this.props.location};
-
         if(this.state.authenticated) {
             return (
                 <Redirect to={from} />
@@ -36,18 +43,17 @@ class Login extends React.Component {
         }
 
         return (
-            <div>
-                <form onSubmit={this.onSubmit}>
-                    <lable>Username:</lable>
-                    <input 
-                        type="text" 
-                        name="username"
-                        value={this.state.username}
-                        onChange={this.onInputChange}
-                    ></input>
-                    <button type="submit">Login</button>
-                </form>
-            </div>
+            <Container>
+                <Form onSubmit={this.onSubmit}>
+                    <Form.Group controlId="username">
+                        <Form.Label>Username:</Form.Label>
+                        <Form.Control type="text" value={this.state.username} onChange={this.onInputChange} 
+                        placeholder="Enter username" />
+                    </Form.Group>
+                    <Button variant="secondary" onClick={this.onCancel} >Cancel</Button>
+                    <Button type="submit">Login</Button>
+                </Form>
+            </Container>
         )
     }
 
