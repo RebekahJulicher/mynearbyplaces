@@ -37,9 +37,9 @@ class List extends React.Component {
                                     <Button variant="btn btn-outline-primary btn-sm" onClick={this.logout}>Logout</Button>
                                 </Row>
                             </Col>
-                            : <Button variant="btn btn-outline-primary btn-sm">
+                            : <Row><Button variant="btn btn-outline-primary btn-sm">
                                 <Link to={{ pathname: '/login', place: place, from: '/list' }}>Login</Link>
-                            </Button>}
+                            </Button></Row>}
                     </Col>
                     {this.state.places.length > 0 ?
                         <Col sm={8}>

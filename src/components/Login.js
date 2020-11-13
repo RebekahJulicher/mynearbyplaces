@@ -23,11 +23,6 @@ class Login extends React.Component {
         event.preventDefault();
     }
 
-    onCancel = (event) => {
-        this.setState({authenticated: true});
-        event.preventDefault();
-    }
-
     onInputChange = (event) => {
         const value = event.target.value;
         const name = event.target.id;
@@ -35,11 +30,21 @@ class Login extends React.Component {
     }
 
     render() {
-        let from = {pathname: this.props.location.from, prevProps: this.props.location};
-        if(this.state.authenticated) {
-            return (
-                <Redirect to={from} />
-            );
+        if (this.props.location.from == "/list"){
+            let from = {pathname: "/mynearbyplaces", prevProps: this.props.location};
+            if(this.state.authenticated) {
+                return (
+                    <Redirect to={from} />
+                );
+            }
+        }
+        else{
+            let from = {pathname: this.props.location.from, prevProps: this.props.location};
+            if(this.state.authenticated) {
+                return (
+                    <Redirect to={from} />
+                );
+            }
         }
 
         return (
