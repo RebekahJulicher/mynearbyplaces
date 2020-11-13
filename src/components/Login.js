@@ -23,6 +23,11 @@ class Login extends React.Component {
         event.preventDefault();
     }
 
+    onCancel = (event) => {
+        this.setState({authenticated: true});
+        event.preventDefault();
+    }
+
     onInputChange = (event) => {
         const value = event.target.value;
         const name = event.target.id;
