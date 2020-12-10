@@ -1,48 +1,15 @@
+let API = "https://rebekahjulicher-nearbyplaces.herokuapp.com";
 import places from "./data.js";
 
-let equality = (one, two) => {
-    if (one.name === two.name && one.category === two.category && one.city === two.city
-        && one.state === two.state && one.reviews === two.reviews) {
-            return true;
-        }
-    return false;
-}
-
+// Untested
 let addPlace = (name, category, city, state) => {
-    let newPlace = {name: name, category: category, city: city, state: state, reviews: [] };
-    places.push(newPlace);
+    let data = {name: name, category: category, city: city, state: state};
+    return(fetch(API + '/place', 
+    {method: "POST", headers: {"CONTENT-TYPE": "application/json"}, body: JSON.stringify(data)})
+    .then(x => x.json()));
 }
 
-let removePlace = (name, category, city, state) => {
-    let newPlace = {name: name, category: category, city: city, state: state};
-    for(let i = 0; i < places.length; i++){
-        let currPlace = places[i];
-        if (equality(newPlace, currPlace)){
-                places.splice(i,1);
-            }
-    }
-}
-
-let updatePlace = (place, name, category, city, state) => {
-    for(let i = 0; i < places.length; i++){
-        let currPlace = places[i];
-        if (equality(place, currPlace)){
-            if (name.length !== 0){
-                places[i].name = name;
-            }
-            if (category.length !== 0){
-                places[i].category = category;
-            }
-            if (city.length !== 0){
-                places[i].city = city;
-            }
-            if (state.length !== 0){
-                places[i].state = state;
-            }
-        }
-    }
-}
-
+// Unchanged because I haven't figured out how to do this yet
 let search = (city, state, category) => {
     let result = [];
     if (city.length > 0) {
@@ -71,15 +38,17 @@ let search = (city, state, category) => {
 }
 
 let addReview = (place, review) => {
-    let currPlace = places.find(x => equality(x, place));
-    if (currPlace){
-        currPlace.reviews.push(review);
-    }
+    //This doesn't use ids because I haven't gotten that sorted yet.
+    return(fetch(API + '/review/', 
+    {method: "POST", headers: {"CONTENT-TYPE": "application/json"}, body: JSON.stringify(review)})
+    .then(x => x.json()));
 }
+
 let getAllPlaces = () => {
-    return places;
+    return(fetch (API + "/places").then(x => x.json()));
 }
-let server = {addPlace: addPlace, getAllPlaces: getAllPlaces, removePlace: removePlace,
-     addReview: addReview, updatePlace: updatePlace, search: search};
+
+let server = {addPlace: addPlace, getAllPlaces: getAllPlaces, addReview: addReview,
+    search: search};
 
 export default server;
