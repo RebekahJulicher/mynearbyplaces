@@ -1,5 +1,4 @@
 let API = "https://rebekahjulicher-nearbyplaces.herokuapp.com";
-import places from "./data.js";
 
 // Untested
 let addPlace = (name, category, city, state) => {
